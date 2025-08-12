@@ -8,7 +8,7 @@ on:
 jobs:
   if_merged:
     if: github.event.pull_request.merged == true
-    name: Build Pocketbase and Push
+    name: Build Pocketbase ARM64 and Push
     runs-on: ubuntu-24.04-arm
     steps:
       -
@@ -28,7 +28,7 @@ jobs:
           images: docker.io/${{ vars.DOCKERHUB_USERNAME }}/pocketbase
           tags: |
             type=raw,value=latest
-            type=raw.value=${{ vars.PB_VERSION }}
+            type=raw,value=${{ vars.PB_VERSION }}
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
