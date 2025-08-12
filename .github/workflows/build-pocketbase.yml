@@ -25,6 +25,7 @@ jobs:
         uses: docker/metadata-action@v5
         id: meta
         with:
+        images: docker.io/${{ vars.DOCKERHUB_USERNAME }}/pocketbase
           tags: |
             type=raw,value=latest
             type=raw,value=build-${{ github.run_number }}
