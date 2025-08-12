@@ -1,21 +1,22 @@
-services:
-  pocketbase:
-    container_name: pocketbase
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: rationalpb
-    restart: unless-stopped
-    environment:
-      ENCRYPTION: ${ENCRYPTION} # optional (Ensure this is a 32-character long encryption key https://pocketbase.io/docs/going-to-production/#enable-settings-encryption)
-    ports:
-      - "127.0.0.1:8080:8080"
-    volumes:
-      - ${COMMON_PATH}/pb_data:/pb/pb_data
-      - ${COMMON_PATH}/pb_public:/pb/pb_public # optional
-      - ${COMMON_PATH}/pb_hooks:/pb/pb_hooks # optional
-    healthcheck: # optional, recommended since v0.10.0
-      test: wget --no-verbose --tries=1 --spider http://localhost:8080/api/health || exit 1
-      interval: 60s
-      timeout: 5s
-      retries: 5
+FROM alpine:latest
+
+ARG PB_VERSION=0.29.2
+
+RUN apk add --no-cache \
+    unzip \
+    ca-certificates
+
+# download and unzip PocketBase x86 64-bit
+ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
+RUN unzip /tmp/pb.zip -d /pb/
+
+# uncomment to copy the local pb_migrations dir into the image
+COPY ./pb_migrations /pb/pb_migrations
+
+# uncomment to copy the local pb_hooks dir into the image
+COPY ./pb_hooks /pb/pb_hooks
+
+EXPOSE 8080
+
+# start PocketBase
+CMD ["/pb/pocketbase", "serve", "--http=0.0.0.0:8080"]
