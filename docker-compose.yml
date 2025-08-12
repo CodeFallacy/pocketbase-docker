@@ -1,10 +1,7 @@
 services:
   pocketbase:
     container_name: pocketbase
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: codefallacy-pocketbase
+    image: azatecas/pocketbase
     restart: unless-stopped
     environment:
       ENCRYPTION: ${ENCRYPTION} # optional (Ensure this is a 32-character long encryption key https://pocketbase.io/docs/going-to-production/#enable-settings-encryption)
