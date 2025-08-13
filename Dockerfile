@@ -4,26 +4,28 @@ ARG PB_VERSION=0.29.2
 
 ARG TARGETARCH
 
-# Set ARCH from TARGETARCH (default to amd64)
-# Pocketbase uses "amd64" or "arm64" in their asset names
-ARG ARCH
-ENV ARCH=${ARCH:-$( \
-  if [ "${TARGETARCH}" = "amd64" ]; then echo "amd64"; \
-  elif [ "${TARGETARCH}" = "arm64" ]; then echo "arm64"; \
-  elif [ "${TARGETARCH}" = "arm" ]; then echo "armv7"; \
-  else echo "Unsupported Architecture ${TARGETARCH}"; fi \
-)}
-
-# You can now echo it or use it
-RUN echo "##### Detected ARCH=$ARCH "
+ENV PB_VERSION=${PB_VERSION}
 
 RUN apk add --no-cache \
+    curl \
     unzip \
     ca-certificates
 
+# TARGETARCH does not supply the exact values we need to we need to do a conditional in the same run command X(
+
+RUN case "$TARGETARCH" in \
+      amd64) ARCH=amd64 ;; \
+      arm64) ARCH=arm64 ;; \
+      arm) ARCH=armv7 ;; \
+      *) echo "Unsupported TARGETARCH: $TARGETARCH" && exit 1 ;; \
+    esac && \
+    curl -fsSL -o /tmp/pb.zip "https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_${ARCH}.zip" && \
+    unzip /tmp/pb.zip -d /pb/ && \
+    rm /tmp/pb.zip
+
 # download and unzip PocketBase x86 64-bit
-ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_${ARCH}.zip /tmp/pb.zip
-RUN unzip /tmp/pb.zip -d /pb/
+# ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_${TARGETARCH}.zip /tmp/pb.zip
+# RUN unzip /tmp/pb.zip -d /pb/
 
 # uncomment to copy the local pb_migrations dir into the image
 # COPY ./pb_migrations /pb/pb_migrations
