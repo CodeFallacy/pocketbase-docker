@@ -5,6 +5,8 @@ Unoffical Pocketbase Docker Container
 This Repo sets up the Github Actions to build and deploy to Dockerhub the `azatecas/pocketbase` image.
 I do not build pocketbase from scratch, but rather pull the official release from the original Pocketbase Repo and containarize it.
 
+Support the original project: https://github.com/pocketbase/pocketbase
+
 Suggested `docker-compose.yml` configuration
 
 ```yml
