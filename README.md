@@ -24,6 +24,9 @@ services:
     container_name: pocketbase
     image: azatecas/pocketbase
     restart: unless-stopped
+    command:
+      - --encryptionEnv
+      - ENCRYPTION
     environment:
       ENCRYPTION: ${ENCRYPTION} # optional (Ensure this is a 32-character long encryption key https://pocketbase.io/docs/going-to-production/#enable-settings-encryption)
     ports:
