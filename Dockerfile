@@ -21,7 +21,8 @@ RUN case "$TARGETARCH" in \
     esac && \
     curl -fsSL -o /tmp/pb.zip "https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_${ARCH}.zip" && \
     unzip /tmp/pb.zip -d /pb/ && \
-    rm /tmp/pb.zip
+    rm /tmp/pb.zip && \
+    echo "Downloaded Pocketbase Version: ${PB_VERSION} Arch: ${ARCH}"
 
 # download and unzip PocketBase x86 64-bit
 # ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_${TARGETARCH}.zip /tmp/pb.zip
