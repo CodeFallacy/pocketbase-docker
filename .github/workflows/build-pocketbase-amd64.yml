@@ -27,7 +27,9 @@ jobs:
         with:
           images: docker.io/${{ vars.DOCKERHUB_USERNAME }}/pocketbase
           tags: |
-            type=raw,value=${{ vars.PB_VERSION }}-${{ vars.AMD64 }}
+            type=raw,value=build-${{ github.run_number }}
+            type=raw,value=${{ vars.PB_VERSION }}
+            type=raw,value=latest
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -36,7 +38,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           tags: ${{ steps.meta.outputs.tags }}
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
           push: true
           build-args: |
             ARCH=${{ vars.AMD64 }}

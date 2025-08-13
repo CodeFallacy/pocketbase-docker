@@ -1,7 +1,20 @@
 FROM alpine:latest
 
 ARG PB_VERSION=0.29.2
-ARG ARCH=amd64
+
+ARG TARGETARCH
+
+# Set ARCH from TARGETARCH (default to amd64)
+# Pocketbase uses "amd64" or "arm64" in their asset names
+ARG ARCH
+RUN if [ -z "$ARCH" ]; then \
+      case "$TARGETARCH" in \
+        amd64) export ARCH=amd64 ;; \
+        arm64) export ARCH=arm64 ;; \
+        *) echo "Unsupported arch: $TARGETARCH" && exit 1 ;; \
+      esac && \
+      echo "Detected ARCH=$ARCH"; \
+    fi
 
 RUN apk add --no-cache \
     unzip \
