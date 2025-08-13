@@ -7,15 +7,15 @@ ARG TARGETARCH
 # Set ARCH from TARGETARCH (default to amd64)
 # Pocketbase uses "amd64" or "arm64" in their asset names
 ARG ARCH
-RUN if [ -z "$ARCH" ]; then \
-      case "$TARGETARCH" in \
-        amd64) export ARCH=amd64 ;; \
-        arm64) export ARCH=arm64 ;; \
-        arm) export ARCH=armv7 ;; \
-        *) echo "Unsupported arch: $TARGETARCH" && exit 1 ;; \
-      esac && \
-      echo "Detected ARCH=$ARCH"; \
-    fi
+ENV ARCH=${ARCH:-$( \
+  if [ "${TARGETARCH}" = "amd64" ]; then echo "amd64"; \
+  elif [ "${TARGETARCH}" = "arm64" ]; then echo "arm64"; \
+  elif [ "${TARGETARCH}" = "arm" ]; then echo "armv7"; \
+  else echo "Unsupported Architecture ${TARGETARCH}"; fi \
+)}
+
+# You can now echo it or use it
+RUN echo "##### Detected ARCH=$ARCH "
 
 RUN apk add --no-cache \
     unzip \
