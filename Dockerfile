@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-ARG PB_VERSION=0.29.2
+ARG PB_VERSION=0.30.0
 
 ARG TARGETARCH
 
@@ -33,6 +33,7 @@ RUN case "$TARGETARCH" in \
 
 # uncomment to copy the local pb_hooks dir into the image
 # COPY ./pb_hooks /pb/pb_hooks
+RUN apk del unzip
 
 EXPOSE 8080
 
