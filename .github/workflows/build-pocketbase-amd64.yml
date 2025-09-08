@@ -27,7 +27,6 @@ jobs:
         with:
           images: docker.io/${{ vars.DOCKERHUB_USERNAME }}/pocketbase
           tags: |
-            type=raw,value=build-${{ github.run_number }}
             type=raw,value=${{ vars.PB_VERSION }}
             type=raw,value=latest
       -

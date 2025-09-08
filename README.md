@@ -5,15 +5,16 @@ Unoffical Pocketbase Docker Container
 Support the original project: https://github.com/pocketbase/pocketbase
 
 
-This Repo sets up the Github Actions to build and deploy to Dockerhub the `azatecas/pocketbase` multiarch image.
-It does not build pocketbase from scratch, but rather pull the official release from the original Pocketbase Repo and containarize it.
+This Repo sets up the Github Actions to build and deploy to Dockerhub the [azatecas/pocketbase](https://hub.docker.com/repository/docker/azatecas/pocketbase)  multiarch image.
+It does not build pocketbase from scratch, but rather pull the [official release](https://github.com/pocketbase/pocketbase/releases) from the original Pocketbase Repo and containarize it.
 
-Current pocketbase architecture supported by this repo:
+Current Pocketbase container architecture supported by this repo:
 - amd64
 - arm64
 - armv7
 
-This image is being used in production, so we will do our best to build after each new Pocketbase release, although it may take a few days.
+This image is being used in production, so we will do our best to build after each new Pocketbase release, although it may take a few days after each official release and there may be additional time limitations since we are using the free tier of github actions which have usage limits :)
+
 
 Suggested `docker-compose.yml` configuration
 
@@ -23,6 +24,9 @@ services:
     container_name: pocketbase
     image: azatecas/pocketbase
     restart: unless-stopped
+    command:
+      - --encryptionEnv
+      - ENCRYPTION
     environment:
       ENCRYPTION: ${ENCRYPTION} # optional (Ensure this is a 32-character long encryption key https://pocketbase.io/docs/going-to-production/#enable-settings-encryption)
     ports:
