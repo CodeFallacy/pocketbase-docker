@@ -5,7 +5,7 @@ Unoffical Pocketbase Docker Container
 Support the original project: https://github.com/pocketbase/pocketbase
 
 
-This Repo sets up the Github Actions to build and deploy to Dockerhub the [azatecas/pocketbase](https://hub.docker.com/repository/docker/azatecas/pocketbase)  multiarch image.
+This Repo sets up the Github Actions to build and deploy to Dockerhub the [azatecas/pocketbase](https://hub.docker.com/r/azatecas/pocketbase)  multiarch image.
 It does not build pocketbase from scratch, but rather pull the [official release](https://github.com/pocketbase/pocketbase/releases) from the original Pocketbase Repo and containarize it.
 
 Current Pocketbase container architecture supported by this repo:
