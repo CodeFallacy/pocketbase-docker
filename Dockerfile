@@ -1,11 +1,15 @@
 FROM alpine:latest
 
 ARG PB_VERSION=0.30.2
-
 ARG TARGETARCH
 
 ENV PB_VERSION=${PB_VERSION}
 
+# Update default Alpine Linux packages that may have know CVE.
+RUN apk update
+RUN apk upgrade
+
+# Add cli utils that will allow this workflow to fetch the Pocketbase package.
 RUN apk add --no-cache \
     curl \
     unzip \
@@ -33,6 +37,7 @@ RUN case "$TARGETARCH" in \
 
 # uncomment to copy the local pb_hooks dir into the image
 # COPY ./pb_hooks /pb/pb_hooks
+# Unzip may contain a known CVE so lets get rid of it since we no longer need it.
 RUN apk del unzip
 
 EXPOSE 8080
