@@ -28,14 +28,14 @@ services:
       - --encryptionEnv
       - ENCRYPTION
     environment:
-      ENCRYPTION: ${ENCRYPTION} # optional (Ensure this is a 32-character long encryption key https://pocketbase.io/docs/going-to-production/#enable-settings-encryption)
+      ENCRYPTION: ${ENCRYPTION}
     ports:
       - "127.0.0.1:8080:8080"
     volumes:
       - ${COMMON_PATH}/pb_data:/pb/pb_data
       - ${COMMON_PATH}/pb_public:/pb/pb_public # optional
       - ${COMMON_PATH}/pb_hooks:/pb/pb_hooks # optional
-    healthcheck: # optional, recommended since v0.10.0
+    healthcheck:
       test: wget --no-verbose --tries=1 --spider http://localhost:8080/api/health || exit 1
       interval: 60s
       timeout: 5s

@@ -32,8 +32,8 @@ jobs:
       -
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      -
-        name: Build and Push
+        
+      - name: Build and Push
         uses: docker/build-push-action@v6
         with:
           tags: ${{ steps.meta.outputs.tags }}
@@ -41,3 +41,17 @@ jobs:
           push: true
           build-args: |
             PB_VERSION=${{ vars.PB_VERSION }}
+
+      - name: Trigger Dokploy Deployment
+        run: |
+            curl -X 'POST' \
+            '${{ secrets.DOKPLOY_WEBHOOK_URL }}' \
+            -H 'Content-Type: application/json' \
+            -H 'x-github-event: push' \
+            -d '{
+              "ref": "refs/heads/production",
+              "head_commit": {
+              "id": "${{ github.sha }}",
+              "message": "Deployment from Github Actions"
+            }
+            }'
