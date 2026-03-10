@@ -59,7 +59,7 @@ jobs:
 
       - name: Trigger Dokploy Deployment
         run: |
-            curl --fail -X 'POST' \
+            curl -X 'POST' \
             '${{ secrets.DOKPLOY_WEBHOOK_URL }}' \
             -H 'Content-Type: application/json' \
             -H 'x-github-event: push' \
