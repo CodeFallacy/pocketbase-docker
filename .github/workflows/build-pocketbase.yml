@@ -1,4 +1,4 @@
-name: Build Pocketbase AMD64
+name: Build Pocketbase MultiArch
 on:
   pull_request:
     branches:
@@ -11,6 +11,21 @@ jobs:
     name: Build Pocketbase AMD64 and Push
     runs-on: ubuntu-latest
     steps:
+      # STEP 1: Checkout the code                                                                                                                                                               
+      - name: Checkout Code                                                                                                                                                                     
+        uses: actions/checkout@v4                                                                                                                                                               
+        with:                                                                                                                                                                                   
+          ref: ${{ github.ref_name }}                                                                                                                                                           
+          fetch-depth: 1   
+
+      # STEP 2: Extract PB_VERSION from Dockerfile
+      - name: Get PB version
+        id: pb_version
+        run: |
+          VERSION=$(grep -oP 'PB_VERSION=\K[^\s]+' Dockerfile)
+          if [ -z "$VERSION" ]; then echo "PB_VERSION not found" && exit 1; fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          
       -
         name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -27,7 +42,7 @@ jobs:
         with:
           images: docker.io/${{ vars.DOCKERHUB_USERNAME }}/pocketbase
           tags: |
-            type=raw,value=${{ vars.PB_VERSION }}
+            type=raw,value=${{ steps.pb_version.outputs.version }}
             type=raw,value=latest
       -
         name: Set up Docker Buildx
@@ -44,7 +59,7 @@ jobs:
 
       - name: Trigger Dokploy Deployment
         run: |
-            curl -X 'POST' \
+            curl --fail -X 'POST' \
             '${{ secrets.DOKPLOY_WEBHOOK_URL }}' \
             -H 'Content-Type: application/json' \
             -H 'x-github-event: push' \
