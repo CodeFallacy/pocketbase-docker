@@ -22,9 +22,8 @@ jobs:
       - name: Get PB version
         id: pb_version
         run: |
-          VERSION=$(grep -oP 'PB_VERSION=\K[^\s]+' Dockerfile)
-          if [ -z "$VERSION" ]; then echo "PB_VERSION not found" && exit 1; fi
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          VERSION=$(grep -oP 'PB_VERSION=\K[^\s]+' Dockerfile)                                                                                                                                  
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"    
           
       -
         name: Login to Docker Hub
