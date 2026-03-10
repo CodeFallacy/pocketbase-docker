@@ -3,8 +3,6 @@ FROM alpine:latest
 ARG PB_VERSION=0.36.6
 ARG TARGETARCH
 
-ENV PB_VERSION=${PB_VERSION}
-
 # Update default Alpine Linux packages that may have know CVE.
 RUN apk update
 RUN apk upgrade
