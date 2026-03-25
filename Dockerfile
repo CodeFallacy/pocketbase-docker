@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-ARG PB_VERSION=0.36.6
+ARG PB_VERSION=0.36.7
 ARG TARGETARCH
 
 # Update default Alpine Linux packages that may have know CVE.
